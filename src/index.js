@@ -1,1 +1,2 @@
-console.log('Hola desde JS');
+const hola = 'Hola';
+console.log(hola);
