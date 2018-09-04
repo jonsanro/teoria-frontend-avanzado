@@ -9,7 +9,7 @@ module.exports = {
     devServer: {
         open: true,
         overlay: true,
-        port: 3000,
+        port: 5500,
         hot: true
     },
     plugins: [new HtmlWebpackPlugin({
@@ -19,5 +19,16 @@ module.exports = {
             collapseWhitespace: true
         }
     })],
-
+    module: {
+        rules: [{
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: "babel-loader"
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            }
+        ]
+    }
 };
