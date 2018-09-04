@@ -1,34 +1,49 @@
+/* eslint-disable */
 var path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var merge = require('webpack-merge');
 
-module.exports = {
-    entry: path.join(__dirname, 'src', 'index.js'),
+var commonConfig = {
+    entry: path.join(__dirname, 'src', 'index'),
     output: {
+        filename: 'bundle[hash].js',
         path: path.resolve(__dirname, 'dist')
     },
-    devServer: {
-        open: true,
-        overlay: true,
-        port: 5500,
-        hot: true
-    },
-    plugins: [new HtmlWebpackPlugin({
-        title: 'play',
-        template: 'src/index.html',
-        minify: {
-            collapseWhitespace: true
-        }
-    })],
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Play',
+            template: path.join(__dirname, 'src', 'index.html'),
+            minify: {
+                collapseWhitespace: true
+            }
+        })
+    ],
     module: {
         rules: [{
-                test: /\.css$/,
+                test: /\.(js)$/,
                 exclude: /node_modules/,
                 use: "babel-loader"
             },
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     }
 };
+
+var devConfig = {
+    devServer: {
+        open: true,
+        overlay: true,
+        port: 3000,
+        hot: true
+    }
+};
+
+var prodConfig = {};
+
+module.exports = (env, argv) =>
+    argv.mode === 'development' ?
+    merge(commonConfig, devConfig) :
+    merge(commonConfig, prodConfig);
